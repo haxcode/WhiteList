@@ -15,68 +15,78 @@ class Validation {
     /**
      * @var string
      */
-    private string $nip;
+    private string $nip = '';
     
     /**
      * @var string
      */
-    private string $iban;
+    private string $iban = '';
     
     /**
      * Validation constructor.
      * @param string $nip
      * @param string $iban
      */
-    public function __construct(string $nip, string $iban) {
+    public function __construct(?string $nip, ?string $iban) {
         $this->setNip($nip);
         $this->setIban($iban);
     }
     
     /**
-     * @param string $nip
+     * @param $nip
      */
-    private static function validateNIP(string $nip) {
-        //TODO add exception and validation
+    public static function validateIban($iban) {
+        if (empty($iban)) {
+            return FALSE;
+        }
+        return (strlen($iban) == 26);
+    }
+    
+    public function validate(): bool {
+        return self::validateNIP($this->getNip());
     }
     
     /**
-     * @param $nip
+     * @param string $nip
      */
-    private static function validateIban($nip) {
-        //TODO add exception and validation
+    public static function validateNIP(string $nip) {
+        if (empty($nip)) {
+            return FALSE;
+        }
+        return (strlen($nip) == 10);
     }
     
     /**
      * @return string
      */
     public function getNip(): string {
-        return $this->nip;
+        return trim($this->nip);
     }
     
     /**
      * @param string $nip
      */
-    public function setNip(string $nip): void {
-        self::validateNIP($nip);
-        $this->nip = $nip;
+    public function setNip(?string $nip): void {
+        if (is_string($nip)) {
+            self::validateNIP($nip);
+            $this->nip = str_replace(' ', '', trim($nip));
+        }
     }
     
     /**
      * @return string
      */
     public function getIban(): string {
-        return $this->iban;
+        return str_replace(' ', '', trim($this->iban));
     }
     
     /**
      * @param string $iban
      */
-    public function setIban(string $iban): void {
+    public function setIban(?string $iban): void {
         self::validateIban($iban);
-        $this->iban = $iban;
+        $this->iban = $iban ?? '';
     }
-    
-    
     
     
 }
