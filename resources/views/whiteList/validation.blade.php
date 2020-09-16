@@ -15,7 +15,7 @@
                                 <label for="nip" class="col-md-4 col-form-label  {{--@error('email') is-invalid @enderror--}} text-md-right">{{ __('NIP') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="nip" type="number" class="form-control" name="nip" value="{{ old('nip') }}" required autocomplete="nip" autofocus>
+                                    <input id="nip" type="number" class=" @error('iban') is-invalid @enderror form-control" name="nip" value="{{ old('nip') }}" required autocomplete="nip" autofocus>
 
                                     @error('nip')
                                     <span class="invalid-feedback" role="alert">
@@ -29,15 +29,21 @@
                                 <label for="iban" class="col-md-4 col-form-label text-md-right">{{ __('Nr konta') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="iban" type="password" class="form-control @error('iban') is-invalid @enderror" name="iban" required autocomplete="current-password">
+                                    <input id="iban" type="number" class=" form-control @error('iban') is-invalid @enderror" autocomplete="iban" name="iban" >
 
-                                    @error('password')
+                                    @error('iban')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
                                 </div>
                             </div>
+
+                            @error('validation')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-4">

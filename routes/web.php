@@ -20,5 +20,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/validation', 'WhiteListController@showValidationPage')->name('Validation Title In Chrom');
-Route::post('/validation', 'WhiteListController@validateForm');
+Route::get('/validation', 'WhiteListController@showValidationPage')->name('Validation');
+Route::post('/validation', 'WhiteListController@validate');

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Model\WhiteList\Validation;
-use http\Client\Response;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Model\WhiteList\ActiveVATPayer;
+
 
 /**
  * Class WhiteListController
@@ -16,6 +16,7 @@ use Illuminate\View\View;
  * @copyright       (c) eDokumenty Sp. z o.o.
  */
 class WhiteListController extends Controller {
+    
     /**
      * WhiteListController constructor.
      */
@@ -24,20 +25,41 @@ class WhiteListController extends Controller {
     }
     
     /**
+     * @param Request $request
+     * @return false|\Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|View
+     */
+    public function validate(Request $request) {
+        $request->validateWithBag('validation', [
+            'nip'  => [
+                'required',
+                'max:10',
+                'min:10',
+            ],
+            'iban' => [
+                'nullable',
+                'max:26',
+                'min:26',
+            ],
+        
+        ]);
+        
+        
+        $validation = new Validation($request->get('nip'), $request->get('iban'));
+        $isActive = ActiveVATPayer::check($validation);
+        
+        if ($isActive) {
+            echo '<script>alert(\'Czynny płatnik VAT\')</script>';
+        } else {
+            echo '<script>alert(\'Brak płatnika na liście czynnych płatnikow VAT\')</script>';
+        }
+        return $this->showValidationPage();
+    }
+    
+    /**
      * @return Factory|View
      */
     public function showValidationPage() {
         return view('whiteList.validation');
-    }
-    
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    public function validateForm(Request $request) {
-        
-        $validation = new Validation($request->get('nip'), $request->get('iban'));
-        
     }
     
     
