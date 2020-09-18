@@ -16,19 +16,19 @@ use App\Model\WhiteList\ActiveVATPayer;
  * @copyright       (c) eDokumenty Sp. z o.o.
  */
 class WhiteListController extends Controller {
-    
+
     /**
      * WhiteListController constructor.
      */
     public function __construct() {
         $this->middleware('auth');
     }
-    
+
     /**
      * @param Request $request
      * @return false|\Illuminate\Contracts\Foundation\Application|Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|View
      */
-    public function validate(Request $request) {
+    public function validation(Request $request) {
         $request->validateWithBag('validation', [
             'nip'  => [
                 'required',
@@ -40,13 +40,13 @@ class WhiteListController extends Controller {
                 'max:26',
                 'min:26',
             ],
-        
+
         ]);
-        
-        
+
+
         $validation = new Validation($request->get('nip'), $request->get('iban'));
         $isActive = ActiveVATPayer::check($validation);
-        
+
         if ($isActive) {
             echo '<script>alert(\'Czynny płatnik VAT\')</script>';
         } else {
@@ -54,13 +54,13 @@ class WhiteListController extends Controller {
         }
         return $this->showValidationPage();
     }
-    
+
     /**
      * @return Factory|View
      */
     public function showValidationPage() {
         return view('whiteList.validation');
     }
-    
-    
+
+
 }
